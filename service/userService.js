@@ -6,20 +6,20 @@ function verifyUser(userObject) {
         return 'No request body';
     }
 
-    if (!('username' in userObject)) {
-        return 'Missing field: username';
+    if (!('email' in userObject)) {
+        return 'Missing field: email';
     }
 
-    let {username, password, firstName, lastName, email} = userObject;
+    let {password, name, email} = userObject;
 
-    if (typeof username !== 'string') {
-        return 'Incorrect field type: username';
+    if (typeof email !== 'string') {
+        return 'Incorrect field type: email';
     }
 
-    username = username.trim();
+   email = email.trim();
 
-    if (username === '') {
-        return 'Incorrect field length: username';
+    if (email === '') {
+        return 'Incorrect field length: email';
     }
 
     if (!(password)) {
@@ -39,32 +39,7 @@ function verifyUser(userObject) {
     return null;
 }
 
-async function isUserAvailable() {
-            let userCount = await User
-                    .find({username})
-                    .count()
-                    .exec();
-            if (userCount > 0) {
-                reject("username already exists");
-                return;
-            } 
-}
-
-
-function UserService() {
-    
-    this.findRelatedUser=function(user) {
-        return new Promise(async (resolve, reject) => {
-            if (user == null) {
-                console.error('User is Null');
-                reject('User is Null');    
-            };
-            let relatedUser  = await User.findOne({'email': user.email, "_id": {'$not': {'$eq': mongoose.Types.ObjectId(user._id)}}}).exec();
-            console.log("The usere is: " + relatedUser)
-            resolve(relatedUser);
-        });        
-    }
-
+function UserService() {    
     this.create = function(userObject) {
         return new Promise(async (resolve,reject) => {
             let valid = verifyUser(userObject);
@@ -74,30 +49,27 @@ function UserService() {
             }
 
             //.. Create the user
-            let {username, password, firstName, lastName, email} = userObject;
+            let {password, name, email} = userObject;
 
-            let isUserAvailable = await this.isUserAvailable(username);
-            if (!isUserAvailable) {
-                reject("username already exists");
+            if (!this.isUserAvailable(email)) {
+                reject("email already exists");
             }
 
             let hashPassword = await User.hashPassword(password);
             let newUser = await User
                 .create({
-                    username: username.toLowerCase(),
                     password: hashPassword,
-                    firstName: firstName,
-                    lastName: lastName,
+                    name: name,
                     email: email
                  });
                  
             resolve(newUser);
         });
     }
-    this.isUserAvailable = function(username) {
+    this.isUserAvailable = function(email) {
         return new Promise(async (resolve,reject) => {
             let userCount = await User
-                        .find({username: username.toLowerCase()})
+                        .find({email: email})
                         .count()
                         .exec();
                 if (userCount > 0) {

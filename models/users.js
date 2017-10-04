@@ -5,28 +5,15 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const UserSchema = mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true
-  },
-
-  password: {
-    type: String,
-    required: true
-  },
-  firstName: {type: String, default: ""},
-  lastName: {type: String, default: ""},
-  email: {type: String, required: true}
-  // anniversary: {type: String, default: ""}
+  password: {type: String, required: true},
+  name: {type: String, default: ""},
+  email: {type: String, unique: true, required: true}
 });
 
 UserSchema.methods.apiRepr = function() {
   return {
     _id: this._id,
-    username: this.username || '',
-    firstName: this.firstName || '',
-    lastName: this.lastName || '',
+    name: this.name || '',
     email: this.email || ''
   };
 }
