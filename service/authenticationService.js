@@ -4,7 +4,7 @@ const passport = require('passport');
 
 const basicStrategy = new BasicStrategy(async (username, password, callback) => {
   try {
-    let user = await User.findOne({username: username.toLowerCase()}).exec();
+    let user = await User.findOne({email: username}).exec();
     if (!user) {
       return callback(null, false, {message: 'Incorrect username'});
     }
@@ -25,7 +25,7 @@ const loginRequired = (req, res, next) => {
   let authenticationMiddleware=passport.authenticate('basic', {session: false}, 
     function(err, user, info) {
       if (err) {
-        condole.error(`Authentication Error: [${err}]`)
+        console.error(`Authentication Error: [${err}]`)
         res.send(500, "Internal Server Error");
       }
 
