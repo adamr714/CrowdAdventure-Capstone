@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 
 const userRouter = require('./userRouter');
+const adventureRouter = require('./adventureRouter');
 
 mongoose.Promise = global.Promise;
 
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 // app.use(express.static('public'));
 
 app.use('/users', userRouter);
+app.use('/adventures', adventureRouter);
 
 let server;
 
