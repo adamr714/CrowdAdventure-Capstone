@@ -1,26 +1,23 @@
 const express = require('express');
-const jsonParser = require('body-parser').json();
-const {Adventures} = require('./models/adventures');
-const AdventureService = require('./service/adventureService');
 const router = express.Router();
+const AdventureService = require('./service/adventureService');
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
+const authenticationService = require('./service/authenticationService'); 
+const userService = require('./service/userService')
+
+//Schema
+
+const {Adventures} = require('./models/adventures');
+const RECEIVE_ADVENTURE_COUNT=10;
 
 router.use(jsonParser);
+authenticationService.initialize(router);
 
-router.post('/create', async (req, res) => {
-  try {
-    let adventureAvailable = await AdventureService.isAdventureAvailable(req.body.projectTitle); 
-
-      if (!adventureAvailable) { 
-        res.status(400).json({message: "Title isn't available"}); 
-        return; 
-      }
-
-    let adventure = await AdventureService.create(req.body);
-    res.status(201).json({message: 'Created'});
-
-  } catch (err) {
-    res.status(500).json({message: err});
-  }
+//Get
+router.get('/', async (req, res) => {
+  let data = await Adventures.find({delete: false}).exec();
+  res.status(200).json(data);
 });
 
 
@@ -28,85 +25,90 @@ router.post('/create', async (req, res) => {
 
 
 
-// router.get('/available/:projectTitle', async (req, res) => {
-//   try {
-//     let userAvailable = await UserService.isUserAvailable(req.params.username);
-//     res.status(200).json(userAvailable);
-//   } catch (err) {
-//     res.status(500).json({message: err});
-//   }
-// });
+router.post('/create',authenticationService.loginRequired, jsonParser, async (req, res) =>  {
+  console.log(req.body.message);
+    let relatedUser = await userService.findRelatedUser(req.user);
+      if (relatedUser !=null) {
+          console.log(relatedUser);
+          let data = await Messages.create({
+                sender: req.user._id.toString(),
+                recipient: relatedUser._id.toString(),
+                message: req.body.message,
+                // date: new Date().toISOString()
+            });
+        res.status(200).json({message: 'Hello'});   
+      } else {
+        console.log('Related User Not Found!');
+        res.status(404).json({message: 'Related User Not Found'});
+      }
+});
 
-// router.post('/login', authenticationService.loginRequired, (req,res) => {
-//     return res.status(200).json({message: 'ok'});
-// });
+// Post Section
+router.post('/', jsonParser, async (req, res) => {
+  console.log(req.body);
+  const requiredFields = ['sender', 'recipient', 'message'];
+  for (let i=0; i<requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if (!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body`
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+  try {
+    let data = await Messages
+      .create({
+        sender: req.body.sender,
+        recipient: req.body.recipient,
+        message: req.body.message
+      });
+    res.status(201).json(data);
+  }
+  catch(err) {
+      console.error(err);
+      res.status(500).json({error: 'Something went wrong'});
+  };
+});
 
+// Delete Section - As Update
+router.delete('/:id', async (req, res) => {
+    let deletedMessage = {delete: true};
 
-// router.post('/', (req, res) => {
-//   if (!req.body) {
-//     return res.status(400).json({message: 'No request body'});
-//   }
-
-//   if (!('username' in req.body)) {
-//     return res.status(422).json({message: 'Missing field: username'});
-//   }
-
-//   if (typeof username !== 'string') {
-//     return res.status(422).json({message: 'Incorrect field type: username'});
-//   }
-
-//   username = username.trim();
-
-//   if (username === '') {
-//     return res.status(422).json({message: 'Incorrect field length: username'});
-//   }
-
-//   if (!(password)) {
-//     return res.status(422).json({message: 'Missing field: password'});
-//   }
-
-//   if (typeof password !== 'string') {
-//     return res.status(422).json({message: 'Incorrect field type: password'});
-//   }
-
-//   password = password.trim();
-
-//   if (password === '') {
-//     return res.status(422).json({message: 'Incorrect field length: password'});
-//   }
-
-//   // check for existing user
-//   return User
-//     .find({username})
-//     .count()
-//     .exec()
-//     .then(count => {
-//       if (count > 0) {
-//         return res.status(422).json({message: 'username already taken'});
-//       }
-//       // if no existing user, hash password
-//       return User.hashPassword(password)
-//     })
-//     .then(hash => {
-//       return User
-//         .create({
-//           username: username,
-//           password: hash,
-//           firstName: firstName,
-//           lastName: lastName,
-//           reference: reference
-//         })
-//     })
+    try {    
+      let data = await Messages.findByIdAndUpdate(req.params.id, {$set: deletedMessage}).exec();
+      console.log(data.message);
+      data.message = req.body.message;
+      res.status(200).send(data);
+    }  catch(err) {
+      console.error(err);
+      res.status(500).json({error: 'something went terribly wrong'});
+    }
+});
 
 
-//     .then(user => {
-//       return res.status(201).json(user.apiRepr());
-//     })
-//     .catch(err => {
-//       console.error('Internal server error:' + err);
-//       res.status(500).json({message: 'Internal server error'})
-//     });
-// });
+// Put Section
+router.put('/:id', jsonParser, async (req, res) => {
+  const requiredFields = ['message'];
+  for (let i=0; i<requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if (!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body`
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+
+  let toUpdate = {message: req.body.message};
+ 
+  try {
+    let data = await Messages.findByIdAndUpdate(req.params.id, {$set: toUpdate}).exec();
+    data.message = req.body.message;
+    res.status(200).send(data);
+  }  catch(err) {
+    consoler.error(err);
+    res.status(500).json({message: 'Internal server error'});
+  }
+});
 
 
 module.exports = router;
