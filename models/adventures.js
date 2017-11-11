@@ -2,21 +2,25 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-const postSchema = mongoose.Schema({
-    projectTitle : {type: String, required: true}, 
-    category : {type: String, required: true},
-    phase : {type: String, required: true},
-    shortDescription : {type: String, required: true},
-    longDescription : {type: String, required: true},
+const adventureSchema = mongoose.Schema({
+    projectTitle : {type: String, required: false}, 
+    category : {type: String, required: false},
+    phase : {type: String, required: false},
+    shortDescription : {type: String, required: false},
+    longDescription : {type: String, required: false},
     rewards : [{
-        title : {type: String},
-        amount : {type: Number},
-        descripton : {type: String}
+        title : {type: String, required: false},
+        amount : {type: Number, required: false},
+        descripton : {type: String, require: false}
     }],    
-    fundingGoal : {type: Number, required: true}
+    fundingGoal : {type: Number, required: false},
+    image : {type: String, required: false},
+    startDate : {type: Date, required: false},
+    endDate : {type: Date, required: false}
 });
 
-const Adventures = mongoose.model('adventures', postSchema, 'adventures');
+const Adventures = mongoose.model('Adventures', adventureSchema, 'adventures');
+
 module.exports = {Adventures};
 
 

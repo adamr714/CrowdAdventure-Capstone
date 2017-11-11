@@ -2,36 +2,46 @@ const {Adventures} = require('../models/adventures');
 const mongoose = require('mongoose');
 
 function verifyAdventure(adventureObject) {
-    if (!userObject) {
+    if (!adventureObject) {
         return 'No request body';
     }
 
-    if (!('projectTitle' in userObject)) {
+    if (!('projectTitle' in adventureObject)) {
         return 'Missing field: Title';
     }
 
-    if (!('category' in userObject)) {
+    if (!('category' in adventureObject)) {
         return 'Missing field: Category';
     }
 
-    if (!('phase' in userObject)) {
+    if (!('phase' in adventureObject)) {
         return 'Missing field: Phase';
     }
 
-    if (!('shortDescription' in userObject)) {
+    if (!('shortDescription' in adventureObject)) {
         return 'Missing field: Short Description';
     }
 
-    if (!('fundingGoal' in userObject)) {
+    if (!('fundingGoal' in adventureObject)) {
         return 'Missing field: Long Description';
     }
 
-    if (!('longDescription' in userObject)) {
+    if (!('longDescription' in adventureObject)) {
         return 'Missing field: Funding Goal';
     }
  
-    let {projectTitle, category, phase, shortDescription, longDescription, rewards, fundingGoal} = adventureObject;
+    if (!('image' in adventureObject)) {
+        return 'Missing field: image';
+    }
 
+    if (!('startDate' in adventureObject)) {
+        return 'Missing field: Starting Date';
+    }
+
+    if (!('endDate' in adventureObject)) {
+        return 'Missing field: Ending Date';
+    }
+    
     return null;
 }
 
@@ -45,7 +55,7 @@ function AdventureService() {
             }
 
             //.. Create the adventure
-            let {projectTitle, category, phase, shortDescription, longDescription, rewards, fundingGoal} = adventureObject;
+            let {projectTitle, category, phase, shortDescription, longDescription, rewards, fundingGoal,image, startDate, endDate} = adventureObject;
 
             if (!this.isAdventureAvailable(projectTitle)) {
                 reject("Adventure already exists");
@@ -59,7 +69,11 @@ function AdventureService() {
                     shortDescription: shortDescription, 
                     longDescription: longDescription, 
                     rewards: rewards, 
-                    fundingGoal: fundingGoal
+                    fundingGoal: fundingGoal,
+                    image: image,
+                    startDate: startDate,
+                    endDate: endDate
+    
                  });
                  
             resolve(newAdventure);
