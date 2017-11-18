@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const adventureSchema = mongoose.Schema({
+    createdBy : {type: String, required: false},
     projectTitle : {type: String, required: false}, 
     category : {type: String, required: false},
     phase : {type: String, required: false},

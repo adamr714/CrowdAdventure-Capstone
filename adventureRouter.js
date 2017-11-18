@@ -14,8 +14,15 @@ router.get('/', async (req, res) => {
   res.status(200).json(data);
 });
 
+router.get('/:projectTitle', async (req, res) => { 
+  let data = await Adventures.findOne({projectTitle: req.params.projectTitle}).exec();
+  res.status(200).json(data);
+}); 
+
+
 router.post('/create',authenticationService.loginRequired, jsonParser, async (req, res) =>  {
   try{
+    req.body.createdBy = req.user.name;    
     let adventureAvailable = await AdventureService.isAdventureAvailable(req.body.projectTitle);
 
     if (!adventureAvailable) {

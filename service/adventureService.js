@@ -55,7 +55,7 @@ function AdventureService() {
             }
 
             //.. Create the adventure
-            let {projectTitle, category, phase, shortDescription, longDescription, rewards, fundingGoal,image, startDate, endDate} = adventureObject;
+            let {createdBy, projectTitle, category, phase, shortDescription, longDescription, rewards, fundingGoal,image, startDate, endDate} = adventureObject;
 
             if (!this.isAdventureAvailable(projectTitle)) {
                 reject("Adventure already exists");
@@ -63,6 +63,7 @@ function AdventureService() {
 
             let newAdventure = await Adventures
                 .create({
+                    createdBy: createdBy, 
                     projectTitle: projectTitle, 
                     category: category, 
                     phase: phase, 
