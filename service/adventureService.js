@@ -74,7 +74,6 @@ function AdventureService() {
                     image: image,
                     startDate: startDate,
                     endDate: endDate
-    
                  });
                  
             resolve(newAdventure);

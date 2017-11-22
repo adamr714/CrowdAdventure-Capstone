@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 
 app.use('/users', userRouter);
 app.use('/adventures', adventureRouter);
-
+app.use('/join', joinRouter);
 let server;
 
 function runServer(databaseUrl=DATABASE_URL, port=PORT) {
