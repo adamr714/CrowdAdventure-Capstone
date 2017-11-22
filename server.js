@@ -5,6 +5,7 @@ const morgan = require('morgan');
 
 const userRouter = require('./userRouter');
 const adventureRouter = require('./adventureRouter');
+const joinRouter = require('./joinRouter');
 
 mongoose.Promise = global.Promise;
 
