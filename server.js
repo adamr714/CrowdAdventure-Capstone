@@ -15,7 +15,7 @@ const app = express();
 app.use(morgan('common'));
 app.use(bodyParser.json());
 
-// app.use(express.static('public'));
+app.use(express.static('public'));
 
 app.use('/users', userRouter);
 app.use('/adventures', adventureRouter);

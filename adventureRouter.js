@@ -19,9 +19,6 @@ router.get('/:projectTitle', async (req, res) => {
   res.status(200).json(data);
 }); 
 
-router.post('/join', authenticationService.loginRequired, jsonParser, async (req, res) => {
-  
-})
 
 router.post('/create',authenticationService.loginRequired, jsonParser, async (req, res) =>  {
   try{

@@ -59,7 +59,7 @@ router.post('/', (req, res) => {
     return res.status(422).json({message: 'Incorrect field type: username'});
   }
 
-  username = username.trim();
+  username = username.toLowerCase().trim();
 
   if (username === '') {
     return res.status(422).json({message: 'Incorrect field length: username'});

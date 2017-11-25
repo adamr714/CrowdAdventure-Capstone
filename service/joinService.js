@@ -1,6 +1,10 @@
 const {Join} = require('../models/join');
 const mongoose = require('mongoose');
 
+// adventureID :  {type: String, required: true},
+// userID: {type: String, required: true},
+// rewardID: {type: String, required: true}
+
 function verifyJoin(joinObject) {
     if (!joinObject) {
         return 'No request body';
@@ -33,7 +37,7 @@ function JoinService() {
             //.. Create the Reward / User collection
             let {adventureID, userID, rewardID} = joinObject;
 
-            if (!this.isARewardAvailable(adventureID, userID, rewardID)) {
+            if (!this.isRewardAvailable(adventureID, userID)) {
                 reject("Already backing this project");
             }
 
@@ -48,13 +52,13 @@ function JoinService() {
         });
     }
 
-    this.isRewardAvailable = function(adventureID, userID, rewardID) {
+    this.isRewardAvailable = function(adventureID, userID) {
         return new Promise(async (resolve,reject) => {
             let rewardCount = await Join
-                        .find({$and:[{adventureID : adventureID}, {userID: userID}, {rewardID: rewardID}]}) 
+                        .find({$and:[{adventureID : adventureID}, {userID: userID}]}) 
                         .count()
                         .exec();
-                if (rewardID > 0) {
+                if (rewardCount > 0) {
                     resolve(false);
                     return;
                 } 

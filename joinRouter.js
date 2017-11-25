@@ -14,10 +14,14 @@ router.get('/', async (req, res) => {
   res.status(200).json(data);
 });
 
-router.post('/join',authenticationService.loginRequired, jsonParser, async (req, res) =>  {
+router.get('/rewards/:adventureID',authenticationService.loginRequired, async (req,res) =>{
+
+});
+
+router.post('/create',authenticationService.loginRequired, jsonParser, async (req, res) =>  {
   try{
-    req.body.createdBy = req.user.name;    
-    let rewardAvailable = await JoinService.isRewardAvailable(req.body.rewardID);
+    req.body.userID = req.user._id;    
+    let rewardAvailable = await JoinService.isRewardAvailable(req.body.adventureID, req.body.userID);
 
     if (!rewardAvailable) {
       res.status(400).json({message: "Reward isn't available"}); 
