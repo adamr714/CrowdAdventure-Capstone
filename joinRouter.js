@@ -15,7 +15,12 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/rewards/:adventureID',authenticationService.loginRequired, async (req,res) =>{
-
+  try{
+    let data = await Join.findOne({userID: req.user.id, adventureID: req.params.adventureID}).exec();
+    res.status(200).json(data);
+  } catch(err) {
+    res.status(500).json({message: err});
+  }
 });
 
 router.post('/create',authenticationService.loginRequired, jsonParser, async (req, res) =>  {
