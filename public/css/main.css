@@ -281,7 +281,8 @@ img.image_small {
   width: 100%;
   float: left;
   margin-right: 2em;
-  margin-top: 5;%
+  margin-top: 1em;
+  padding-bottom: 1em;
 }
 
 p.title {
@@ -333,6 +334,12 @@ p.adventureSoloTitle {
   box-shadow: 2px 2px 4px #000;
   border-radius: 10px;
   margin-bottom: 1em;
+}
+
+.backed {
+  background-color: lightyellow;
+  border: 3px solid crimson;
+  content: "•";
 }
 
 p.individual_title {
