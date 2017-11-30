@@ -1,4 +1,13 @@
+.whatis {
+  background-color: lightsteelblue;
+  padding: .5em;
+  margin-top: 1em;
+  font-size: 1.2em;
+  line-height: 145%;
+  /* margin-block-start: 2em; */
+}
 
+/* 
 .adventureContainer {
 	width: 99%;
 	border: 1px solid #0e3d69;
@@ -12,7 +21,25 @@
   background-color: #fff;
   min-height: 14em;
   margin-bottom: 1em;
+} */
+
+.adventureContainer {
+	width: 99%;
+	/* border: 1px solid #0e3d69; */
+	/* border-radius: 10px 10px 10px 10px; */
+	-moz-border-radius: 10px 10px 10px 10px;
+	/* -webkit-border-radius: 10px 10px 10px 10px; */
+	padding: 10px;
+	/* -webkit-box-shadow: 8px 9px 5px -4px rgba(0,0,0,0.28); */
+	-moz-box-shadow: 8px 9px 5px -4px rgba(0,0,0,0.28);
+	/* box-shadow: 8px 9px 5px -4px rgba(0,0,0,0.28); */
+	background-color: #fff;
+	min-height: 14em;
+  margin-bottom: 1em;
+  margin-top: 2em;
+	/* background-color: lightcyan; */
 }
+
 
 .rewardContainer {
 	/* width: 99%; */
@@ -46,6 +73,7 @@
 }
 
 p {
+  font-family: 'Barlow Condensed', sans-serif;  
 	margin: 0;
 	font-size: 1.3em;
   line-height: 132%;
@@ -228,27 +256,30 @@ input, textarea {
 	text-align: center;
   }
 
-  .button_adventure {
+.button_adventure {
     border: 0;
-	border-radius: .2em;
+	/* border-radius: .2em; */
 	width: 100%;
-	display: inline-block;
-	margin-left: 0 auto;
+	/* display: inline-block; */
+	/* margin-left: 0 auto;
 	margin-right: 0 auto;
-    padding: .5em;
-    font-size: 1em;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: .1em;
-    background: #0e3d69;
-    color: #ffffff;
-    transition: all 0.5s ease;
-    -webkit-appearance: none;
+  padding: .5em; */
+  font-size: 1em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  /* background: #0e3d69; */
+  /* color: #ffffff; */
+  /* transition: all 0.5s ease;
+  -webkit-appearance: none; */
 	cursor: pointer;
-  text-align: center;
-  box-shadow: 4px 4px 8px lightblue;
+  text-align: right;
+  /* box-shadow: 4px 4px 8px lightblue; */
   }
 
+  .button_adventure:hover {
+    color: crimson;
+  }
 
   .FormError {
     font-size: 1em;
@@ -290,8 +321,8 @@ p.title {
   font-weight: bold;
   font-variant: small-caps;
   font-size: 3em;
-  text-shadow: 2px 2px 4px darkseagreen;
-  margin-bottom: .3em;
+  /* text-shadow: 2px 2px 4px darkseagreen;
+  margin-bottom: .3em; */
 }
 
 p.creator {
@@ -301,7 +332,7 @@ p.creator {
  }
 
  p.description {
-   line-height: 130%;
+   line-height: 160%;
    margin-bottom: .3em;
  }
 
@@ -348,9 +379,9 @@ p.individual_title {
   /* padding: .2em; */
 }
 
-.rewards {
+/* .rewards {
   margin-top: 1em;
-}
+} */
 
 .message {
   /* background-color: rgba(255,255,255, .4); */
